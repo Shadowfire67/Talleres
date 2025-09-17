@@ -1,117 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
+/// App principal con GoRouter
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Proyecto Flutter',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomePage(),
+    final GoRouter router = GoRouter(
+      routes: [
+        GoRoute(path: '/', builder: (context, state) => const HomePage()),
+        GoRoute(
+          path: '/detail/:name',
+          builder: (context, state) {
+            final name = state.pathParameters['name'] ?? 'Sin nombre';
+            return DetailPage(name: name);
+          },
+        ),
+      ],
+    );
+
+    return MaterialApp.router(
+      title: 'Taller Flutter',
+      routerConfig: router,
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+/// Página principal con botones para go/push/replace
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  String _titulo = "Hola, Flutter";
-
-  void _cambiarTitulo() {
-    setState(() {
-      _titulo = _titulo == "Hola, Flutter"
-          ? "¡Título cambiado!"
-          : "Hola, Flutter";
-    });
-
-    // Mostrar SnackBar
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Título actualizado")));
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(_titulo), centerTitle: true),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Página Principal"),
+          bottom: const TabBar(
+            tabs: [
+              Tab(icon: Icon(Icons.grid_view), text: "GridView"),
+              Tab(icon: Icon(Icons.info), text: "Navegación"),
+            ],
+          ),
+        ),
+        drawer: const Drawer(
+          // <-- Tercer widget
+          child: Center(child: Text("Menú lateral con Drawer")),
+        ),
+        body: TabBarView(
           children: [
-            // Nombre centrado
-            const Center(
-              child: Text(
-                "Juan Manuel Martinez Jojoa",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            // ---- Tab 1: GridView ----
+            GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
               ),
+              itemCount: 9,
+              itemBuilder: (context, index) {
+                return Card(child: Center(child: Text("Item $index")));
+              },
             ),
-
-            const SizedBox(height: 20),
-
-            // Row con imágenes
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // Imagen de Internet
-                Image.network(
-                  "https://brandlogos.net/wp-content/uploads/2021/12/flutter-brandlogo.net_-512x512.png",
-                  width: 100,
-                ),
-                // Imagen desde assets
-                Image.asset(
-                  "assets/flutter.png", // <-- coloca tu imagen en /assets
-                  width: 100,
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // Botón que cambia el título
-            ElevatedButton(
-              onPressed: _cambiarTitulo,
-              child: const Text("Cambiar título"),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Container con estilo
-            Container(
-              margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue, width: 2),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.blue.shade50,
-              ),
-              child: const Text("Este es un texto dentro de un Container"),
-            ),
-
-            const SizedBox(height: 20),
-
-            // ListView dentro de un Expanded
-            Expanded(
-              child: ListView(
-                children: const [
-                  ListTile(leading: Icon(Icons.person), title: Text("Perfil")),
-                  ListTile(
-                    leading: Icon(Icons.settings),
-                    title: Text("Configuración"),
+            // ---- Tab 2: Botones navegación ----
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => context.go('/detail/Go'),
+                    child: const Text("Ir con go()"),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.logout),
-                    title: Text("Cerrar sesión"),
+                  ElevatedButton(
+                    onPressed: () => context.push('/detail/Push'),
+                    child: const Text("Ir con push()"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => context.replace('/detail/Replace'),
+                    child: const Text("Ir con replace()"),
                   ),
                 ],
               ),
@@ -119,18 +89,62 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-
-      // Botón extra en la parte inferior
-      floatingActionButton: OutlinedButton.icon(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Acción adicional ejecutada")),
-          );
-        },
-        icon: const Icon(Icons.star),
-        label: const Text("Extra"),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+}
+
+/// Pantalla secundaria que muestra el parámetro
+class DetailPage extends StatefulWidget {
+  final String name;
+  const DetailPage({super.key, required this.name});
+
+  @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  @override
+  void initState() {
+    super.initState();
+    print("initState() → Se ejecuta una sola vez al crear el widget");
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print(
+      "didChangeDependencies() → Se ejecuta cuando cambian dependencias de InheritedWidgets",
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print("build() → Se ejecuta cada vez que se redibuja la pantalla");
+    return Scaffold(
+      appBar: AppBar(title: Text("Detalle: ${widget.name}")),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Parámetro recibido: ${widget.name}"),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  print("setState() → Se ejecuta al cambiar el estado");
+                });
+              },
+              child: const Text("Ejecutar setState()"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    print("dispose() → Se ejecuta al destruir el widget");
+    super.dispose();
   }
 }
