@@ -1,27 +1,65 @@
-# Taller 1 – Flutter
+# Taller 2 – Navegación, Widgets y Ciclo de Vida
 
-Este proyecto corresponde al Taller 1 de Flutter, en el cual se construyó una aplicación básica que permite familiarizarse con la estructura de un proyecto Flutter y el uso de widgets.
+Este taller implementa una aplicación en Flutter que utiliza navegación con go_router, paso de parámetros entre pantallas, uso de widgets intermedios y evidencia del ciclo de vida de un StatefulWidget.
 
-La aplicación incluye:
+## Arquitectura y navegación
 
-Uso de assets (imagen local en assets/).
+La aplicación se basa en rutas gestionadas con go_router:
 
-Implementación de al menos dos widgets adicionales:
+/ → Pantalla principal (HomePage)
 
-Container → para aplicar márgenes, bordes y estilos.
+Contiene un GridView y una TabBar para organizar contenido.
 
-ListView → para mostrar una lista de elementos con íconos y texto.
+Incluye un Drawer como tercer widget adicional.
 
-Ejecución y despliegue en un emulador/dispositivo Android.
+/detail/:name → Pantalla de detalle (DetailPage)
 
-Este taller tiene como propósito reforzar conceptos iniciales de Dart y Flutter, explorando la creación de interfaces gráficas simples y el manejo de recursos.
+Recibe parámetros desde la URL (:name).
 
-# Pasos para ejecutar el proyecto
+Muestra el valor recibido en pantalla.
+
+Tipos de navegación demostrados:
+
+go('/detail/valor') → reemplaza toda la navegación (no se puede volver atrás).
+
+push('/detail/valor') → apila la ruta (se puede volver con el botón “atrás”).
+
+replace('/detail/valor') → reemplaza solo la ruta actual.
+
+## Widgets usados y justificación
+
+GridView → permite mostrar una lista de elementos en forma de cuadrícula.
+
+TabBar + TabBarView → organiza el contenido en pestañas, separando la sección de la cuadrícula y la de navegación.
+
+Drawer → implementa un menú lateral como widget adicional.
+
+La combinación de estos widgets permite practicar la construcción de interfaces más estructuradas y con navegación fluida.
+
+## Ciclo de vida de StatefulWidget
+
+En la pantalla de detalle (DetailPage) se evidencian los siguientes métodos con print() en consola y comentarios en el código:
+
+initState()
+
+didChangeDependencies()
+
+build()
+
+setState()
+
+dispose()
+
+Esto permite observar cuándo y por qué se ejecuta cada método del ciclo de vida.
+
+---
+
+## Pasos para ejecutar el proyecto
 
 Clonar el repositorio
 
 git clone https://github.com/Shadowfire67/Talleres.git
-cd proyecto
+cd Talleres
 
 
 Obtener las dependencias
@@ -35,6 +73,6 @@ Abre Android Studio / Visual Studio Code y levanta un emulador.
 
 O conecta tu celular con depuración USB habilitada.
 
-Ejecutar la aplicación
+Ejecutar la app
 
 flutter run
