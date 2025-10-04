@@ -58,11 +58,4 @@ Este repo contiene la implementación de tres demos para trabajar procesos de se
 - Rama base: `dev`. Se creó la rama `feature/taller_segundo_plano` para el taller.
 - Se abrirá PR de `feature/taller_segundo_plano` → `dev`. Tras revisión, merge a `dev` y luego integrar a `main`.
 
-## Evidencias
-
-Incluye en el PDF:
-- Cronómetro/contador funcionando (iniciar/pausar/reiniciar).
-- Pantalla de carga (Future/async/await) y resultado.
-- Isolate: pantalla con tiempos y consola con mensajes.
-- Primera página: URL del repositorio.
 
