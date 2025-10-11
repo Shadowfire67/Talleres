@@ -1,83 +1,68 @@
-# proyecto
+# Taller: Segundo plano en Flutter (Future, Timer, Isolate)
 
-A new Flutter project.
+Este repo contiene la implementación de tres demos para trabajar procesos de segundo plano en Flutter:
 
-## Módulo: Consumo de API pública con http + go_router
+1) Future + async/await: simulación de carga remota con `Future.delayed`, mostrando estados Cargando/Éxito/Error.
+2) Timer: cronómetro con Iniciar/Pausar/Reanudar/Reiniciar, actualización cada 1 s y limpieza en `dispose`.
+3) Isolate: tarea CPU-bound (suma 1..N) ejecutada en un `Isolate.spawn`, comunicando resultados por mensajes.
 
-Este módulo implementa un listado y detalle de recetas usando TheMealDB.
+## Estructura relevante
 
-- API: https://www.themealdb.com/api.php
-- Endpoints usados:
-	- Búsqueda por nombre: `/api/json/v1/1/search.php?s=<query>`
-	- Detalle por id: `/api/json/v1/1/lookup.php?i=<id>`
+- `lib/main.dart`: menú principal para navegar a cada demo.
+- `lib/services/fake_service.dart`: servicio simulado con `Future.delayed`.
+- `lib/screens/async_demo_page.dart`: demo de Future/async/await.
+- `lib/screens/timer_demo_page.dart`: demo de Timer (cronómetro).
+- `lib/screens/isolate_demo_page.dart`: demo de Isolate (tarea pesada).
 
-Ejemplo de respuesta JSON (search):
+## ¿Cuándo usar cada uno?
 
-```
-{
-	"meals": [
-		{
-			"idMeal": "52772",
-			"strMeal": "Teriyaki Chicken Casserole",
-			"strCategory": "Chicken",
-			"strArea": "Japanese",
-			"strInstructions": "...",
-			"strMealThumb": "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"
-		}
-	]
-}
-```
+- Future / async / await:
+	- Operaciones asíncronas no-bloqueantes que esperan I/O: red, lectura de archivos, delays.
+	- Usa `await` para escribir código secuencial y manejar errores con `try/catch`.
+	- Muestra estados en la UI (cargando, error, datos) para buena UX.
 
-### Arquitectura de carpetas
+- Timer:
+	- Tareas basadas en tiempo (repetición o una sola vez) en el hilo principal.
+	- Ej.: cronómetro/contador, sondeos simples. Cancela el `Timer` al pausar o salir (`dispose`).
 
-- `lib/models/meal.dart`: modelo de dominio con `fromJson`.
-- `lib/services/meal_service.dart`: capa de servicio HTTP con manejo de errores (statusCode, excepciones).
-- `lib/views/meal_list_page.dart`: pantalla de listado con estados (cargando/éxito/error) y `ListView.builder`.
-- `lib/views/meal_detail_page.dart`: pantalla de detalle con información ampliada e imagen.
-- `lib/config/app_router.dart`: configuración de rutas con `go_router` y rutas con nombre.
+- Isolate:
+	- Trabajo pesado de CPU que bloquearía la UI si se ejecuta en el hilo principal.
+	- Usa `Isolate.spawn` y comunica datos por `SendPort/ReceivePort`.
+	- Ideal para cálculos intensivos, parseos grandes, compresión, etc.
 
-### Rutas (go_router)
+## Pantallas y flujos
 
-- `name: mealList`, path: `/` → Listado.
-- `name: mealDetail`, path: `/meal/:id` → Detalle.
-	- Parámetros: `id` (path), y opcional `extra` (instancia de `Meal`).
+- Menú principal (`HomeMenuPage`):
+	- 1) Future + async/await → `AsyncDemoPage`
+		- Botones: Cargar / Forzar error.
+		- Estados: Cargando… (CircularProgressIndicator), Éxito (datos), Error.
+		- Consola: impresión del orden de ejecución (antes, durante, después).
+	- 2) Timer → `TimerDemoPage`
+		- Botones: Iniciar / Pausar / Reanudar / Reiniciar.
+		- Texto grande con el tiempo formateado HH:MM:SS.
+		- Limpieza: `dispose` cancela el timer.
+	- 3) Isolate → `IsolateDemoPage`
+		- Input N; ejecuta suma 1..N en un isolate y devuelve resultado y tiempo (ms).
+		- Muestra progreso y libera el isolate al terminar o salir.
 
-### Estado y manejo de errores
+## Cómo ejecutar
 
-- Se utilizan `FutureBuilder` y banderas locales para estados.
-- `try/catch` con verificación de `statusCode` y `SnackBar` ante errores de red.
+1. Tener Flutter configurado.
+2. Instalar dependencias:
+	 - `flutter pub get`
+3. Ejecutar:
+	 - `flutter run`
 
-### Requisitos de ejecución
+## GitFlow utilizado
 
-Dependencias principales:
+- Rama base: `dev`. Se creó la rama `feature/taller_segundo_plano` para el taller.
+- Se abrirá PR de `feature/taller_segundo_plano` → `dev`. Tras revisión, merge a `dev` y luego integrar a `main`.
 
-- `http`
-- `go_router`
+## Evidencias
 
-### Evidencias (añadir en PDF)
+Incluye en el PDF:
+- Cronómetro/contador funcionando (iniciar/pausar/reiniciar).
+- Pantalla de carga (Future/async/await) y resultado.
+- Isolate: pantalla con tiempos y consola con mensajes.
+- Primera página: URL del repositorio.
 
-- Capturas de Listado con elementos y fotos.
-- Capturas de Detalle recibiendo parámetros.
-- Capturas de consola mostrando estados y manejo de errores.
-- En la primera página del PDF incluir URL del repositorio.
-
-### GitFlow utilizado
-
-1. Rama base: `dev`.
-2. Nueva rama de feature: `feature/taller_http`.
-3. Pull Request: `feature/taller_http` → `dev`.
-4. Tras revisión, merge a `dev` y luego integrar cambios a `main`.
-
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
