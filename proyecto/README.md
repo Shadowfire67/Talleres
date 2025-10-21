@@ -65,6 +65,14 @@ Dependencias principales:
 4. Tras revisión, merge a `dev` y luego integrar cambios a `main`.
 
 
+
+
+1. Rama base: `dev`.
+2. Nueva rama de feature: `feature/taller_http`.
+3. Pull Request: `feature/taller_http` → `dev`.
+4. Tras revisión, merge a `dev` y luego integrar cambios a `main`.
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
