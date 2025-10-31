@@ -38,9 +38,7 @@ class _MealDetailPageState extends State<MealDetailPage> {
         });
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('No se encontró el detalle de la receta'),
-            ),
+            const SnackBar(content: Text('No se encontró el detalle de la receta')),
           );
         }
       } else {
@@ -53,9 +51,9 @@ class _MealDetailPageState extends State<MealDetailPage> {
         _error = 'Error al cargar: $e';
       });
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error de red: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error de red: $e')),
+        );
       }
     } finally {
       if (mounted) {
@@ -69,48 +67,50 @@ class _MealDetailPageState extends State<MealDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_meal?.name ?? 'Detalle')),
+      appBar: AppBar(
+        title: Text(_meal?.name ?? 'Detalle'),
+      ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _error != null
-          ? _ErrorView(message: _error!, onRetry: _fetch)
-          : _meal == null
-          ? const Center(child: Text('Sin datos'))
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (_meal!.thumbnail != null)
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(_meal!.thumbnail!),
+              ? _ErrorView(message: _error!, onRetry: _fetch)
+              : _meal == null
+                  ? const Center(child: Text('Sin datos'))
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (_meal!.thumbnail != null)
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(_meal!.thumbnail!),
+                            ),
+                          const SizedBox(height: 12),
+                          Text(
+                            _meal!.name,
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            children: [
+                              if ((_meal!.category ?? '').isNotEmpty)
+                                Chip(label: Text('Categoría: ${_meal!.category}')),
+                              if ((_meal!.area ?? '').isNotEmpty)
+                                Chip(label: Text('Área: ${_meal!.area}')),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Instrucciones',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(_meal!.instructions ?? 'Sin instrucciones'),
+                        ],
+                      ),
                     ),
-                  const SizedBox(height: 12),
-                  Text(
-                    _meal!.name,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    children: [
-                      if ((_meal!.category ?? '').isNotEmpty)
-                        Chip(label: Text('Categoría: ${_meal!.category}')),
-                      if ((_meal!.area ?? '').isNotEmpty)
-                        Chip(label: Text('Área: ${_meal!.area}')),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Instrucciones',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(_meal!.instructions ?? 'Sin instrucciones'),
-                ],
-              ),
-            ),
     );
   }
 }
@@ -138,7 +138,7 @@ class _ErrorView extends StatelessWidget {
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
               label: const Text('Reintentar'),
-            ),
+            )
           ],
         ),
       ),

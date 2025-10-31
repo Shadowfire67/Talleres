@@ -20,9 +20,7 @@ class MealService {
       final data = json.decode(res.body) as Map<String, dynamic>;
       final meals = data['meals'] as List<dynamic>?;
       if (meals == null) return [];
-      return meals
-          .map((e) => Meal.fromJson(e as Map<String, dynamic>))
-          .toList();
+      return meals.map((e) => Meal.fromJson(e as Map<String, dynamic>)).toList();
     } catch (e) {
       rethrow;
     }

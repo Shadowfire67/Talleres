@@ -33,18 +33,6 @@ class _MealListPageState extends State<MealListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('TheMealDB - Listado'),
-        actions: [
-          IconButton(
-            tooltip: 'Login',
-            onPressed: () => context.goNamed('login'),
-            icon: const Icon(Icons.login),
-          ),
-          IconButton(
-            tooltip: 'Evidencia',
-            onPressed: () => context.goNamed('evidence'),
-            icon: const Icon(Icons.fact_check),
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -102,15 +90,15 @@ class _MealListPageState extends State<MealListPage> {
                             )
                           : const Icon(Icons.fastfood),
                       title: Text(meal.name),
-                      subtitle: Text(
-                        [
-                          if ((meal.category ?? '').isNotEmpty) meal.category!,
-                          if ((meal.area ?? '').isNotEmpty) meal.area!,
-                        ].join(' · '),
-                      ),
+                      subtitle: Text([
+                        if ((meal.category ?? '').isNotEmpty) meal.category!,
+                        if ((meal.area ?? '').isNotEmpty) meal.area!,
+                      ].join(' · ')),
                       onTap: () => context.goNamed(
                         'mealDetail',
-                        pathParameters: {'id': meal.id},
+                        pathParameters: {
+                          'id': meal.id,
+                        },
                         extra: meal,
                       ),
                     );
@@ -148,7 +136,7 @@ class _ErrorView extends StatelessWidget {
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
               label: const Text('Reintentar'),
-            ),
+            )
           ],
         ),
       ),
