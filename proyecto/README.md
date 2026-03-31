@@ -67,3 +67,21 @@ Dependencias principales:
 
 
 
+1. Rama base: `dev`.
+2. Nueva rama de feature: `feature/taller_http`.
+3. Pull Request: `feature/taller_http` → `dev`.
+4. Tras revisión, merge a `dev` y luego integrar cambios a `main`.
+
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

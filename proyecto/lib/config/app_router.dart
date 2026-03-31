@@ -10,9 +10,8 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       name: 'mealList',
       path: '/',
-      pageBuilder: (context, state) => const MaterialPage(
-        child: MealListPage(),
-      ),
+      pageBuilder: (context, state) =>
+          const MaterialPage(child: MealListPage()),
     ),
     GoRoute(
       name: 'mealDetail',

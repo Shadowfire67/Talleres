@@ -31,9 +31,7 @@ class _MealListPageState extends State<MealListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('TheMealDB - Listado'),
-      ),
+      appBar: AppBar(title: const Text('TheMealDB - Listado')),
       body: Column(
         children: [
           Padding(
@@ -90,15 +88,15 @@ class _MealListPageState extends State<MealListPage> {
                             )
                           : const Icon(Icons.fastfood),
                       title: Text(meal.name),
-                      subtitle: Text([
-                        if ((meal.category ?? '').isNotEmpty) meal.category!,
-                        if ((meal.area ?? '').isNotEmpty) meal.area!,
-                      ].join(' · ')),
+                      subtitle: Text(
+                        [
+                          if ((meal.category ?? '').isNotEmpty) meal.category!,
+                          if ((meal.area ?? '').isNotEmpty) meal.area!,
+                        ].join(' · '),
+                      ),
                       onTap: () => context.goNamed(
                         'mealDetail',
-                        pathParameters: {
-                          'id': meal.id,
-                        },
+                        pathParameters: {'id': meal.id},
                         extra: meal,
                       ),
                     );
@@ -136,7 +134,7 @@ class _ErrorView extends StatelessWidget {
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
               label: const Text('Reintentar'),
-            )
+            ),
           ],
         ),
       ),
